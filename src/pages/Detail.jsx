@@ -1,10 +1,19 @@
 import React from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function Detail() {
+export default function Detail({ Data, deletePost }) {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const selectedItem = Data.find((item) => item.id === parseInt(id, 10));
+
+  const handleDelete = () => {
+    alert("삭제하겠습니다");
+    deletePost(selectedItem.id);
+    navigate("/");
+  };
+
   return (
     <>
       <Header />
@@ -16,7 +25,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          제목
+          {selectedItem.title}
         </h1>
         <div
           style={{
@@ -26,10 +35,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad doloribus
-          blanditiis vitae sapiente. Expedita delectus nihil animi pariatur,
-          labore quod officiis dolor fugit. Mollitia quod, delectus velit
-          deleniti nihil veniam!
+          {selectedItem.content}
         </div>
         <div
           style={{
@@ -55,9 +61,7 @@ export default function Detail() {
             수정
           </button>
           <button
-            onClick={() => {
-              alert("삭제할까?");
-            }}
+            onClick={handleDelete}
             style={{
               border: "none",
               padding: "8px",

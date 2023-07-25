@@ -1,9 +1,25 @@
-import React from "react";
-
+import React, { useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
+import { useNavigate } from "react-router-dom";
 
-export default function Create() {
+export default function Create({ addPost }) {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newPost = {
+      id: Date.now(),
+      title: title,
+      content: content,
+      author: "작성자",
+    };
+    addPost(newPost);
+    navigate("/");
+  };
+
   return (
     <>
       <Header />
@@ -15,14 +31,15 @@ export default function Create() {
             flexDirection: "column",
             justifyContent: "space-evenly",
           }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("제출!");
-          }}
+          onSubmit={handleSubmit}
         >
           <div>
             <input
               placeholder="제목"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
               style={{
                 width: "100%",
                 height: "60px",
@@ -41,6 +58,10 @@ export default function Create() {
           >
             <textarea
               placeholder="내용"
+              value={content}
+              onChange={(e) => {
+                setContent(e.target.value);
+              }}
               style={{
                 resize: "none",
                 height: "100%",

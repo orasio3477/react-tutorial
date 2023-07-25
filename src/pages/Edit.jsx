@@ -1,8 +1,31 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
+import { useParams, useNavigate } from "react-router-dom";
 
-export default function Edit() {
+export default function Edit({ Data, updatePost }) {
+  const { id } = useParams();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const post = Data.find((item) => item.id === parseInt(id, 10));
+    if (post) {
+      setTitle(post.title);
+      setContent(post.content);
+    }
+  }, [Data, id]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("제출!");
+
+    updatePost(parseInt(id, 10), { title, content });
+
+    navigate(`/`);
+  };
+
   return (
     <Fragment>
       <Header />
@@ -14,14 +37,13 @@ export default function Edit() {
             flexDirection: "column",
             justifyContent: "space-evenly",
           }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log("제출!");
-          }}
+          onSubmit={handleSubmit}
         >
           <div>
             <input
               placeholder="제목"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               style={{
                 width: "100%",
                 height: "60px",
@@ -40,6 +62,8 @@ export default function Edit() {
           >
             <textarea
               placeholder="내용"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
               style={{
                 resize: "none",
                 height: "100%",

@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
 
-export default function Main() {
+export default function Main({ Data, deletePost }) {
   const navigate = useNavigate();
+
+  const handleDelete = (id) => {
+    deletePost(id);
+  };
+
   return (
     <>
       <Header />
@@ -32,9 +37,13 @@ export default function Main() {
             추가
           </button>
         </div>
-        {[1, 2, 3, 4].map((item) => (
+        {/*
+        useState로 만들어 배열을 map함수로 뿌려줌
+        item으로 매개변수 지정
+        */}
+        {Data.map((item) => (
           <div
-            key={item}
+            key={item.id}
             style={{
               backgroundColor: "#EEEEEE",
               height: "100px",
@@ -46,7 +55,7 @@ export default function Main() {
           >
             <div
               onClick={() => {
-                navigate("/detail/1");
+                navigate(`/detail/${item.id}`);
               }}
               style={{
                 flex: 4,
@@ -54,7 +63,7 @@ export default function Main() {
                 cursor: "pointer",
               }}
             >
-              <h2>제목</h2>
+              <h2 key={item}>{item.title}</h2>
               <p
                 style={{
                   width: "300px",
@@ -63,10 +72,7 @@ export default function Main() {
                   whiteSpace: "nowrap",
                 }}
               >
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.Lorem
-                ipsum dolor, sit amet consectetur adipisicing elit.Lorem ipsum
-                dolor, sit amet consectetur adipisicing elit.Lorem ipsum dolor,
-                sit amet consectetur adipisicing elit.
+                {item.content}
               </p>
             </div>
             <div
@@ -79,11 +85,11 @@ export default function Main() {
                 gap: "12px",
               }}
             >
-              <div>작성자</div>
+              <div>{item.author}</div>
               <div>
                 <button
                   onClick={() => {
-                    navigate("/edit");
+                    navigate(`/edit/${item.id}`);
                   }}
                   style={{
                     border: "none",
@@ -99,7 +105,8 @@ export default function Main() {
                 </button>
                 <button
                   onClick={() => {
-                    alert("삭제할까?");
+                    alert("삭제하겠습니다.");
+                    handleDelete(item.id);
                   }}
                   style={{
                     border: "none",
