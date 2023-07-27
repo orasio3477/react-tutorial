@@ -2,15 +2,21 @@ import React from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { deletePost } from "..";
 
-export default function Detail({ Data, deletePost }) {
+export default function Detail() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const selectedItem = Data.find((item) => item.id === parseInt(id, 10));
+
+  const datas = useSelector((state) => state.post);
+  const selectedItem = datas.find((item) => item.id === parseInt(id, 10));
+
+  const dispatch = useDispatch();
 
   const handleDelete = () => {
     alert("삭제하겠습니다");
-    deletePost(selectedItem.id);
+    dispatch(deletePost(selectedItem.id));
     navigate("/");
   };
 
@@ -46,7 +52,7 @@ export default function Detail({ Data, deletePost }) {
         >
           <button
             onClick={() => {
-              navigate("/edit");
+              navigate(`/edit/${selectedItem.id}`);
             }}
             style={{
               border: "none",

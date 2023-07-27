@@ -2,26 +2,29 @@ import React, { Fragment, useState, useEffect } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { updatePost } from "..";
 
-export default function Edit({ Data, updatePost }) {
+export default function Edit() {
   const { id } = useParams();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const datas = useSelector((state) => state.post);
+  const [title, setTitle] = useState(() => {
+    const post = datas.find((item) => item.id === parseInt(id, 10));
+    return post ? post.title : "";
+  });
+  const [content, setContent] = useState(() => {
+    const post = datas.find((item) => item.id === parseInt(id, 10));
+    return post ? post.content : "";
+  });
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const post = Data.find((item) => item.id === parseInt(id, 10));
-    if (post) {
-      setTitle(post.title);
-      setContent(post.content);
-    }
-  }, [Data, id]);
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("제출!");
 
-    updatePost(parseInt(id, 10), { title, content });
+    dispatch(updatePost({ id: parseInt(id, 10), title, content }));
 
     navigate(`/`);
   };

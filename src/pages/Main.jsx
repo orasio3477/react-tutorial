@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
+import { useSelector, useDispatch } from "react-redux";
+import { deletePost } from "..";
 
-export default function Main({ Data, deletePost }) {
+export default function Main() {
   const navigate = useNavigate();
 
+  const datas = useSelector((state) => state.post);
+  const dispatch = useDispatch();
+
   const handleDelete = (id) => {
-    deletePost(id);
+    dispatch(deletePost(id));
   };
 
   return (
@@ -41,7 +46,7 @@ export default function Main({ Data, deletePost }) {
         useState로 만들어 배열을 map함수로 뿌려줌
         item으로 매개변수 지정
         */}
-        {Data.map((item) => (
+        {datas.map((item) => (
           <div
             key={item.id}
             style={{

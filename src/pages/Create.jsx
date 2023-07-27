@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addPost } from "..";
 
-export default function Create({ addPost }) {
+export default function Create() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,7 +19,7 @@ export default function Create({ addPost }) {
       content: content,
       author: "작성자",
     };
-    addPost(newPost);
+    dispatch(addPost(newPost));
     navigate("/");
   };
 
