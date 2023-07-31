@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useSelector, useDispatch } from "react-redux";
-import { deletePost } from "..";
+import { deletePost } from "../redux/store";
 
 export default function Main() {
   const navigate = useNavigate();
@@ -12,7 +12,10 @@ export default function Main() {
   const dispatch = useDispatch();
 
   const handleDelete = (id) => {
-    dispatch(deletePost(id));
+    const confirm = window.confirm("삭제하겠습니까?");
+    if (confirm) {
+      dispatch(deletePost(id));
+    }
   };
 
   return (
@@ -110,7 +113,6 @@ export default function Main() {
                 </button>
                 <button
                   onClick={() => {
-                    alert("삭제하겠습니다.");
                     handleDelete(item.id);
                   }}
                   style={{

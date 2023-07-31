@@ -5,28 +5,8 @@ import Create from "./pages/Create";
 import Edit from "./pages/Edit";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import { useState } from "react";
-import { useSelector } from "react-redux";
 
 function App() {
-  // const addNewPost = (newPost) => {
-  //   setData([...data, newPost]);
-  // };
-
-  // const updatePost = (id, updatedPost) => {
-  //   setData((prevData) =>
-  //     prevData.map((post) =>
-  //       post.id === id ? { ...post, ...updatedPost } : post
-  //     )
-  //   );
-  // };
-
-  // const deletePost = (id) => {
-  //   setData((prevData) => prevData.filter((post) => post.id !== id));
-  // };
-
-  const datas = useSelector((state) => state.post);
-
   return (
     // 페이지 이동에 사용되는 Route 태그를 위해선 Routes로 먼저 감싸야 한다.
     <Routes>

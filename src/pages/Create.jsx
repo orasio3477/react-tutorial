@@ -3,7 +3,8 @@ import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addPost } from "..";
+import { addPost } from "../redux/store";
+import { nanoid } from "@reduxjs/toolkit";
 
 export default function Create() {
   const [title, setTitle] = useState("");
@@ -14,7 +15,7 @@ export default function Create() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newPost = {
-      id: Date.now(),
+      id: nanoid(),
       title: title,
       content: content,
       author: "작성자",

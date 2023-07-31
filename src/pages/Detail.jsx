@@ -3,21 +3,23 @@ import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { deletePost } from "..";
+import { deletePost } from "../redux/store";
 
 export default function Detail() {
   const navigate = useNavigate();
   const { id } = useParams();
 
   const datas = useSelector((state) => state.post);
-  const selectedItem = datas.find((item) => item.id === parseInt(id, 10));
+  const selectedItem = datas.find((item) => item.id === id);
 
   const dispatch = useDispatch();
 
   const handleDelete = () => {
-    alert("삭제하겠습니다");
-    dispatch(deletePost(selectedItem.id));
-    navigate("/");
+    const confirm = window.confirm("삭제하겠습니까?");
+    if (confirm) {
+      dispatch(deletePost(selectedItem.id));
+      navigate("/");
+    }
   };
 
   return (
@@ -31,7 +33,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          {selectedItem.title}
+          {selectedItem?.title}
         </h1>
         <div
           style={{
@@ -41,7 +43,7 @@ export default function Detail() {
             padding: "12px",
           }}
         >
-          {selectedItem.content}
+          {selectedItem?.content}
         </div>
         <div
           style={{
