@@ -4,6 +4,7 @@ import Container from "../common/Container";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { deletePost } from "../redux/store";
+import { auth } from "../firebase";
 
 export default function Detail() {
   const navigate = useNavigate();
@@ -14,11 +15,18 @@ export default function Detail() {
 
   const dispatch = useDispatch();
 
+  const user = auth.currentUser;
+  const isUserAuthor = user && user.email === selectedItem?.author;
+
   const handleDelete = () => {
-    const confirm = window.confirm("삭제하겠습니까?");
-    if (confirm) {
-      dispatch(deletePost(selectedItem.id));
-      navigate("/");
+    if (isUserAuthor) {
+      const confirm = window.confirm("삭제하겠습니까?");
+      if (confirm) {
+        dispatch(deletePost(selectedItem.id));
+        navigate("/");
+      }
+    } else {
+      alert("해당 게시글을 삭제할 권한이 없습니다.");
     }
   };
 

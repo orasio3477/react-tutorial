@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addPost } from "../redux/store";
 import { nanoid } from "@reduxjs/toolkit";
+import { auth } from "../firebase";
 
 export default function Create() {
   const [title, setTitle] = useState("");
@@ -14,11 +15,12 @@ export default function Create() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const userEmail = auth.currentUser.email;
     const newPost = {
       id: nanoid(),
       title: title,
       content: content,
-      author: "작성자",
+      author: userEmail,
     };
     dispatch(addPost(newPost));
     navigate("/");

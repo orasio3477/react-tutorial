@@ -1,10 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../common/Header";
 import Container from "../common/Container";
 import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Signup() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
+
+  const onChange = (event) => {
+    const {
+      target: { name, value },
+    } = event;
+    if (name === "email") {
+      setEmail(value);
+    }
+    if (name === "password") {
+      setPassword(value);
+    }
+    if (name === "passwordCheck") {
+      setPasswordCheck(value);
+    }
+  };
+
+  const signUp = (event) => {
+    event.preventDefault();
+
+    if (!email) {
+      alert("이메일을 입력해주세요.");
+      return;
+    } else if (!password) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    } else if (!passwordCheck) {
+      alert("비밀번호를 확인해주세요.");
+      return;
+    } else if (password !== passwordCheck) {
+      alert("비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+      return;
+    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        alert("회원가입 완료 되었습니다");
+        navigate("/");
+      })
+      .catch((error) => {
+        alert("중복된 이메일 입니다.");
+      });
+  };
+
   return (
     <>
       <Header />
@@ -26,6 +74,10 @@ export default function Signup() {
             >
               <input
                 placeholder="이메일"
+                type="email"
+                value={email}
+                name="email"
+                onChange={onChange}
                 style={{
                   width: "100%",
                   height: "40px",
@@ -46,6 +98,9 @@ export default function Signup() {
               <input
                 placeholder="비밀번호"
                 type="password"
+                value={password}
+                name="password"
+                onChange={onChange}
                 style={{
                   width: "100%",
                   height: "40px",
@@ -66,6 +121,9 @@ export default function Signup() {
               <input
                 placeholder="비밀번호 확인"
                 type="password"
+                value={passwordCheck}
+                name="passwordCheck"
+                onChange={onChange}
                 style={{
                   width: "100%",
                   height: "40px",
@@ -84,6 +142,7 @@ export default function Signup() {
               }}
             >
               <button
+                onClick={signUp}
                 style={{
                   width: "100%",
                   border: "none",

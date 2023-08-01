@@ -4,6 +4,7 @@ import Header from "../common/Header";
 import Container from "../common/Container";
 import { useSelector, useDispatch } from "react-redux";
 import { deletePost } from "../redux/store";
+import { auth } from "../firebase";
 
 export default function Main() {
   const navigate = useNavigate();
@@ -11,10 +12,20 @@ export default function Main() {
   const datas = useSelector((state) => state.post);
   const dispatch = useDispatch();
 
+  const user = auth.currentUser;
+
   const handleDelete = (id) => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
     const confirm = window.confirm("삭제하겠습니까?");
     if (confirm) {
-      dispatch(deletePost(id));
+      if (user.email === auth) {
+        dispatch(deletePost(id));
+      } else {
+        alert("해당 게시글을 삭제할 권한이 없습니다.");
+      }
     }
   };
 
