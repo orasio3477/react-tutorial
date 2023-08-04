@@ -18,11 +18,20 @@ export default function Detail() {
   const user = auth.currentUser;
   const isUserAuthor = user && user.email === selectedItem?.author;
 
+  const handleEdit = () => {
+    if (isUserAuthor) {
+      navigate(`/edit/${selectedItem.id}`);
+    } else {
+      alert("해당 게시글을 수정할 권한이 없습니다.");
+    }
+  };
+
   const handleDelete = () => {
     if (isUserAuthor) {
       const confirm = window.confirm("삭제하겠습니까?");
       if (confirm) {
         dispatch(deletePost(selectedItem.id));
+        alert("삭제되었습니다.");
         navigate("/");
       }
     } else {
@@ -61,9 +70,7 @@ export default function Detail() {
           }}
         >
           <button
-            onClick={() => {
-              navigate(`/edit/${selectedItem.id}`);
-            }}
+            onClick={handleEdit}
             style={{
               border: "none",
               padding: "8px",

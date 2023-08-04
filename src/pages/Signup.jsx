@@ -50,6 +50,7 @@ export default function Signup() {
       })
       .catch((error) => {
         alert("중복된 이메일 입니다.");
+        console.log(error);
       });
   };
 

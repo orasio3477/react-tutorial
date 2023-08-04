@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Header() {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      // console.log(user);
       setUser(user);
     });
 
@@ -19,6 +22,7 @@ export default function Header() {
     signOut(auth)
       .then(() => {
         alert("로그아웃 되었습니다.");
+        navigate("/");
       })
       .catch((error) => {
         console.error("Error logging out:", error);

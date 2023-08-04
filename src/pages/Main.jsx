@@ -14,18 +14,53 @@ export default function Main() {
 
   const user = auth.currentUser;
 
+  console.log(user);
+
+  const handleAdd = () => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    navigate("/create");
+  };
+
   const handleDelete = (id) => {
     if (!user) {
       alert("로그인이 필요합니다.");
       return;
     }
-    const confirm = window.confirm("삭제하겠습니까?");
-    if (confirm) {
-      if (user.email === auth) {
-        dispatch(deletePost(id));
-      } else {
-        alert("해당 게시글을 삭제할 권한이 없습니다.");
-      }
+
+    const postAuthor = datas.find((item) => item.id === id)?.author;
+    if (user.email !== postAuthor) {
+      alert("해당 게시글을 삭제할 권한이 없습니다.");
+      return;
+    }
+
+    const confirmDelete = window.confirm("삭제하겠습니까?");
+    if (confirmDelete) {
+      dispatch(deletePost(id));
+      alert("삭제되었습니다.");
+    }
+  };
+
+  //   const confirm = window.confirm("삭제하겠습니까?");
+  //   if (confirm) {
+  //     if (user.email === datas.find((item) => item.id === id)?.author) {
+  //       dispatch(deletePost(id));
+  //       alert("삭제되었습니다.");
+  //     } else {
+  //       alert("해당 게시글을 삭제할 권한이 없습니다.");
+  //     }
+  //   }
+  // };
+
+  // 나중에 다시 확인
+  const handleEdit = (id) => {
+    const authorEmail = datas.find((item) => item.id === id)?.author;
+    if (user && user.email === authorEmail) {
+      navigate(`/edit/${id}`);
+    } else {
+      alert("해당 게시글을 수정할 권한이 없습니다.");
     }
   };
 
@@ -41,9 +76,7 @@ export default function Main() {
           }}
         >
           <button
-            onClick={() => {
-              navigate("/create");
-            }}
+            onClick={handleAdd}
             style={{
               border: "none",
               padding: "8px",
@@ -108,7 +141,7 @@ export default function Main() {
               <div>
                 <button
                   onClick={() => {
-                    navigate(`/edit/${item.id}`);
+                    handleEdit(item.id);
                   }}
                   style={{
                     border: "none",
